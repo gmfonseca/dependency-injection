@@ -1,38 +1,30 @@
 package br.com.gmfonseca.dependencyinjection
 
-import br.com.gmfonseca.dependencyinjection.contract.Definition
-import br.com.gmfonseca.dependencyinjection.contract.Lazy
-import br.com.gmfonseca.dependencyinjection.contract.Modules
-import br.com.gmfonseca.dependencyinjection.contract.Single
-import br.com.gmfonseca.dependencyinjection.contract.factory
-import br.com.gmfonseca.dependencyinjection.contract.lazy
-import br.com.gmfonseca.dependencyinjection.contract.modules
-import br.com.gmfonseca.dependencyinjection.contract.single
-import br.com.gmfonseca.dependencyinjection.core.get
-import br.com.gmfonseca.dependencyinjection.scopes.Strategy
+import br.com.gmfonseca.dependencyinjection.core.module
 
 fun main() {
-    val singletonStrategy = Strategy.Singleton(singleModules())
-    val lazyStrategy = Strategy.Lazier(lazyModules())
-    val factoryStrategy = Strategy.Factory(factoryModules())
+    val module = buildModules()
 
-    val scopes = listOf(
-        singletonStrategy.scope,
-        lazyStrategy.scope,
-        factoryStrategy.scope,
-    )
+    println("- Foo -")
+    println("FooBar:\t${module.get<FooBar>().bar.foo}")
+    println("Bar:\t${module.get<Bar>().foo}")
+    println("Foo:\t${module.get<Foo>()}")
 
-    scopes.forEach { println(it.get<String>()) }
+    println("\n- Bar -")
+    println("FooBar:\t${module.get<FooBar>().bar}")
+    println("Bar:\t${module.get<Bar>()}")
+
+    println("\n- FooBar -")
+    println("FooBar:\t${module.get<FooBar>()}")
+    println("FooBar:\t${module.get<FooBar>()}")
 }
 
-fun singleModules(): Modules<Single<*>> = modules(
-    single { "single" },
-)
+fun buildModules() = module {
+    factory { Bar(get()) }
+    lazy { Foo() }
+    single { FooBar(get()) }
+}
 
-fun lazyModules(): Modules<Lazy<*>> = modules(
-    lazy { "lazy" },
-)
-
-fun factoryModules(): Modules<Definition<*>> = modules(
-    factory { "factory" },
-)
+class Foo
+class Bar(val foo: Foo)
+class FooBar(val bar: Bar)

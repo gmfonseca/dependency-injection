@@ -7,5 +7,3 @@ class Lazy<out T>(private val factory: Definition<T>) {
 
     private fun createInstance() = factory.create().also { _instance = it }
 }
-
-inline fun <reified T> lazy(builder: Definition<T>): Pair<String, Lazy<T>> = T::class.java.name to Lazy(builder)
