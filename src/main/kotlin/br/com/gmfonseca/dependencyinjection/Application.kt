@@ -21,10 +21,11 @@ fun main() {
 
 fun buildModules() = module {
     factory { Bar(get()) }
-    lazy { Foo() }
+    lazy<Foo> { FooImpl() }
     single { FooBar(get()) }
 }
 
-class Foo
+interface Foo
+class FooImpl: Foo
 class Bar(val foo: Foo)
 class FooBar(val bar: Bar)

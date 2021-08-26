@@ -1,5 +1,5 @@
 package br.com.gmfonseca.dependencyinjection.core
 
-interface InstanceFactory<T> {
+interface InstanceCreator<T> {
     fun get(): T
 }
