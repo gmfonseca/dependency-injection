@@ -3,7 +3,7 @@ package br.com.gmfonseca.dependencyinjection
 import br.com.gmfonseca.dependencyinjection.core.module
 
 fun main() {
-    val module = buildModules()
+    val module = buildModule()
 
     println("- Foo -")
     println("FooBar:\t${module.get<FooBar>().bar.foo}")
@@ -19,7 +19,7 @@ fun main() {
     println("FooBar:\t${module.get<FooBar>()}")
 }
 
-fun buildModules() = module {
+fun buildModule() = module {
     factory { Bar(get()) }
     lazy<Foo> { FooImpl() }
     single { FooBar(get()) }

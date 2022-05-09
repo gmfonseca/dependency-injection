@@ -1,5 +1,5 @@
 package br.com.gmfonseca.dependencyinjection.contract
 
-class Single<out T>(factory: Creator<T>) {
-    val instance: T = factory.create()
+class Single<out T>(creator: Creator<T>) {
+    val instance: T = creator.create()
 }
